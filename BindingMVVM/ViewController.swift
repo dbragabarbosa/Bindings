@@ -25,6 +25,13 @@ class ViewController: UIViewController
         print(loginVM.username)
         print(loginVM.password)
     }
+    
+    @objc func fetchLoginInfo()
+    {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.loginVM.username.value = "marydoe"
+        }
+    }
 
     private func setupUI()
     {
@@ -34,7 +41,7 @@ class ViewController: UIViewController
         usernameTextField.borderStyle = .roundedRect
         usernameTextField.bind { [weak self] text in
 //            print(text)
-            self?.loginVM.username = text
+            self?.loginVM.username.value = text
         }
         
         let passwordTextField = BindingTextField()
@@ -43,7 +50,7 @@ class ViewController: UIViewController
         passwordTextField.backgroundColor = UIColor.lightGray
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.bind { [weak self] text in
-            self?.loginVM.password = text
+            self?.loginVM.password.value = text
         }
         
         let loginButton = UIButton()
@@ -51,7 +58,12 @@ class ViewController: UIViewController
         loginButton.backgroundColor = UIColor.gray
         loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
         
-        let stackView = UIStackView(arrangedSubviews: [usernameTextField, passwordTextField, loginButton])
+        let fetchLoginInfoButton = UIButton()
+        fetchLoginInfoButton.setTitle("Fetch Login Info", for: .normal)
+        fetchLoginInfoButton.backgroundColor = UIColor.blue
+        fetchLoginInfoButton.addTarget(self, action: #selector(fetchLoginInfo), for: .touchUpInside)
+        
+        let stackView = UIStackView(arrangedSubviews: [usernameTextField, passwordTextField, loginButton, fetchLoginInfoButton])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = 20
